@@ -4,23 +4,29 @@ import unittest
 from datetime import datetime, timezone
 from uuid import uuid4
 
-from ai_engine.messages import KeyValue, AgentJSON, UAgentResponse, UAgentResponseType
-from ai_engine.types import UAgentResponseType as ResponseType
+from ai_engine.messages import KeyValue as MessagesKeyValue, AgentJSON
+from ai_engine.types import KeyValue, UAgentResponse, UAgentResponseType as ResponseType
 
 
 class TestKeyValue(unittest.TestCase):
-    """Test KeyValue model."""
+    """Test KeyValue models from both messages and types."""
 
-    def test_key_value_creation_string_key(self):
-        """Test KeyValue creation with string key."""
-        kv = KeyValue(key="test_key", value="test_value")
+    def test_messages_key_value_creation_string_key(self):
+        """Test KeyValue creation with string key from messages module."""
+        kv = MessagesKeyValue(key="test_key", value="test_value")
         self.assertEqual(kv.key, "test_key")
         self.assertEqual(kv.value, "test_value")
 
-    def test_key_value_creation_int_key(self):
-        """Test KeyValue creation with integer key."""
-        kv = KeyValue(key=42, value="test_value")
+    def test_messages_key_value_creation_int_key(self):
+        """Test KeyValue creation with integer key from messages module."""
+        kv = MessagesKeyValue(key=42, value="test_value")
         self.assertEqual(kv.key, 42)
+        self.assertEqual(kv.value, "test_value")
+
+    def test_types_key_value_creation(self):
+        """Test KeyValue creation from types module (only string keys)."""
+        kv = KeyValue(key="test_key", value="test_value")
+        self.assertEqual(kv.key, "test_key")
         self.assertEqual(kv.value, "test_value")
 
 
