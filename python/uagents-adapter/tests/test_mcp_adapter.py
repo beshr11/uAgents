@@ -91,14 +91,14 @@ class TestMCPServerAdapter(unittest.TestCase):
     @unittest.skipUnless(MCP_AVAILABLE, "MCP adapter not available")
     def test_adapter_initialization(self):
         """Test adapter initializes with correct parameters."""
-        self.assertEqual(self.adapter._mcp_server, self.mock_mcp_server)
-        self.assertEqual(self.adapter._api_key, self.api_key)
-        self.assertEqual(self.adapter._model, self.model)
+        self.assertEqual(self.adapter.mcp, self.mock_mcp_server)
+        self.assertEqual(self.adapter.api_key, self.api_key)
+        self.assertEqual(self.adapter.model, self.model)
 
     @unittest.skipUnless(MCP_AVAILABLE, "MCP adapter not available")
     def test_adapter_has_required_attributes(self):
         """Test adapter has all required attributes."""
-        required_attrs = ["_mcp_server", "_api_key", "_model", "_base_url"]
+        required_attrs = ["mcp", "api_key", "model", "asi1_base_url"]
         for attr in required_attrs:
             self.assertTrue(hasattr(self.adapter, attr), f"Missing attribute: {attr}")
 
@@ -124,25 +124,25 @@ class TestMCPProtocolMessages(unittest.TestCase):
         """Test CallTool message creation."""
         tool_name = "test_tool"
         arguments = {"arg1": "value1"}
-        msg = CallTool(name=tool_name, arguments=arguments)
-        self.assertEqual(msg.name, tool_name)
-        self.assertEqual(msg.arguments, arguments)
+        msg = CallTool(tool=tool_name, args=arguments)
+        self.assertEqual(msg.tool, tool_name)
+        self.assertEqual(msg.args, arguments)
 
     @unittest.skipUnless(MCP_AVAILABLE, "MCP adapter not available")
     def test_call_tool_response_success(self):
         """Test successful CallToolResponse creation."""
-        content = [{"type": "text", "text": "Success"}]
-        response = CallToolResponse(content=content, isError=False)
-        self.assertEqual(response.content, content)
-        self.assertFalse(response.isError)
+        result = "Success"
+        response = CallToolResponse(result=result, error=None)
+        self.assertEqual(response.result, result)
+        self.assertIsNone(response.error)
 
     @unittest.skipUnless(MCP_AVAILABLE, "MCP adapter not available")
     def test_call_tool_response_error(self):
         """Test error CallToolResponse creation."""
-        content = [{"type": "text", "text": "Error occurred"}]
-        response = CallToolResponse(content=content, isError=True)
-        self.assertEqual(response.content, content)
-        self.assertTrue(response.isError)
+        error_msg = "Error occurred"
+        response = CallToolResponse(result=None, error=error_msg)
+        self.assertIsNone(response.result)
+        self.assertEqual(response.error, error_msg)
 
 
 if __name__ == "__main__":

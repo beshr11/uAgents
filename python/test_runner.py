@@ -13,6 +13,7 @@ def run_tests():
     """Run all test suites."""
     python_path = ":".join([
         str(Path(__file__).parent / "src"),
+        str(Path(__file__).parent / "uagents-core"),
         str(Path(__file__).parent / "uagents-adapter" / "src"),
         str(Path(__file__).parent / "uagents-ai-engine" / "src"),
     ])
